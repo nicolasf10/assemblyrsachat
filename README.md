@@ -28,5 +28,6 @@ To learn more about RSA encryption visit lesson [8.4 The RSA Cryptosystem | Univ
 ### Resources
 - [Sockets Tutorial | LinuxHowtos](https://www.linuxhowtos.org/C_C++/socket.htm)
 - [Arm64 Syscalls](https://arm64.syscall.sh/)
+- [OpenSSL](https://openssl-library.org/)
 - [8.4 The RSA Cryptosystem | University of Toronto](https://www.teach.cs.toronto.edu/~csc110y/fall/notes/08-cryptography/04-rsa-cryptosystem.html).
 
