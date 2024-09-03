@@ -14,11 +14,11 @@ A connection between the server and client is established using a socket (point-
 After connecting, the server and client exchange their public keys with one another. When the client sends a message to the server, the client will use the server's public key to encrypt its own message, and upon receiving the message, the server will decrypt it with its private key (and the opposite goes for when the server sends a message to the client).
 
 ### Screenshot
-![Server screenshot](/screenshots/server.png)
+![Server screenshot](/server.png)
 
 
 ### RSA Encryption
-The RSA-related functionality is done via the rsa_wrapper.c file, which define helper functions written in C:
+The RSA-related functionality is done via the `rsa_wrapper.c` file, which define helper functions written in C (using the OpenSSL library):
 - `generate_rsa_keys_wrapper` - generates RSA key
 - `public_encrypt_wrapper` - encrypts message given a public key
 - `public_decrypt_wrapper` - decrypts message given public and private key pair
