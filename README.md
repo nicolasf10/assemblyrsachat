@@ -28,13 +28,13 @@ To learn more about RSA encryption visit lesson [8.4 The RSA Cryptosystem | Univ
 ### Compiling and running
 *OpenSSL must be installed*
 Compiling `rsa_wrapper.c`:
-`gcc -c -o rsa_wrapper.o rsa_wrapper.c -lssl -lcrypto`
+1. `gcc -c -o rsa_wrapper.o rsa_wrapper.c -lssl -lcrypto`
 
 Compiling `client.s` and `server.s`:
 Replace "program" with "server" and "client" accordingly
-`as -march=armv8-a -o program.o program.s`
-`ld -o program program.o rsa_wrapper.o -lc -lssl -lcrypto`
-`./program 500` OR `gdb --args ./program 5000` (for debugging)
+1. `as -march=armv8-a -o program.o program.s`
+2. `ld -o program program.o rsa_wrapper.o -lc -lssl -lcrypto`
+3. `./program 500` OR `gdb --args ./program 5000` (for debugging)
 
 
 ### Resources
