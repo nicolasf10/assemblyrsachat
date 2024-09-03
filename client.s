@@ -112,7 +112,6 @@ str_to_int_done:
 
 error_str_to_int:
 	blr x1			// Branching to error address
-
 	
 .global _start
 
@@ -149,12 +148,6 @@ after_portno:
 generate_keys:
 	// Set e to 0x10001
 	ldr x1, =e		// Load into x1 address of e
-	//mov w0, 0x010001
-	//mov w0, 0x0100
-	//lsl w0, w0,  #16 // Loading the highter
-	//mov w2, 0x0100
-	//add w0, w0, w2 // Loading the lower
-	//str w0, [x1]		// Write into memory the value of e
 
 	// Call C function wrapper (OpenSSL implementation)
 	ldr x0, =p_prime
@@ -189,7 +182,6 @@ connect:
 
 	ldr x1, =portno_place	// Store address of the portno placeholder
 	strh w2, [x1]		// Store portno at portno_place
-
 
 	mov x0, #0
 	ldr x2, =sockfd
@@ -283,7 +275,7 @@ check_socket:
 	
 	and w0, w0, #1		// fds[0].revent & POLLIN
 	cmp w0, #0
-//brk #0
+	
 	beq check_input		// If no new messages, branch to check input
 
 	// Process socket message
@@ -303,7 +295,6 @@ read_msg:
 	
 	ldr x1, =ans_buffer	// Load answer buffer into x1
 	mov x2, #BUFFER_SIZE // Move buffer size into x2
-	//sub x2, x2, #1		// Subtract one from buffer size for null terminator
 	mov x8, #63		// Syscall number for read
 	svc #0			// Syscall
 
@@ -328,7 +319,6 @@ decrypt_message:
 	bl public_decrypt_wrapper
 	
 print_message:
-	//brk #0
 	ldr x1, =ans_buffer	// Load answer buffer into x1
 	mov x0, #1		// stdout
 	mov x2, #BUFFER_SIZE
@@ -359,9 +349,7 @@ handle_input:
 	mov x2, #BUFFER_SIZE
 	sub x2, x2, #1		// Set buffer size
 	mov x8, #63		// Syscall number for read
-//brk #0
 	svc #0			// Syscall
-	//brk #0
 	cmp x0, #0
 	blt error_exit		// Error if read length less than 0
 
@@ -375,21 +363,14 @@ encrypt_message:
 	
 	
 write_socket:
-	//brk #0
 	ldr x1, =sockfd	// Load address of newsockfd into x1
 	mov x0, #0
 	ldrh w0, [x1]		// Load value of newsockfd into x0
 
-	//mov w0, #0 		// TESTING PURPOSES: Potential issue is that newsockfd is 0 so it's just writing to the terminal instead
-	//brk #0
-
-	
 	ldr x1, =buffer		// Load buffer into x1
 	mov x2, #BUFFER_SIZE 
 	mov x8, #64		// Syscall number for write
 	svc #0			// Syscall
-
-	//brk #0
 
 	b event_loop
 

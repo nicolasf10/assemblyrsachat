@@ -25,6 +25,18 @@ The RSA-related functionality is done via the `rsa_wrapper.c` file, which define
 
 To learn more about RSA encryption visit lesson [8.4 The RSA Cryptosystem | University of Toronto](https://www.teach.cs.toronto.edu/~csc110y/fall/notes/08-cryptography/04-rsa-cryptosystem.html).
 
+### Compiling and running
+*OpenSSL must be installed*
+Compiling `rsa_wrapper.c`:
+`gcc -c -o rsa_wrapper.o rsa_wrapper.c -lssl -lcrypto`
+
+Compiling `client.s` and `server.s`:
+Replace "program" with "server" and "client" accordingly
+`as -march=armv8-a -o program.o program.s`
+`ld -o program program.o rsa_wrapper.o -lc -lssl -lcrypto`
+`./program 500` OR `gdb --args ./program 5000` (for debugging)
+
+
 ### Resources
 - [Sockets Tutorial | LinuxHowtos](https://www.linuxhowtos.org/C_C++/socket.htm)
 - [Arm64 Syscalls](https://arm64.syscall.sh/)

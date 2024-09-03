@@ -40,7 +40,6 @@ fds:
 
 .bss
 buffer: .zero 256
-safe_end: .zero 32
 ans_buffer: .zero 256
 portno: .skip 2
 sockfd: .skip 2
@@ -60,7 +59,6 @@ zero_test: .zero 32
 .text
 
 .equ BUFFER_SIZE, 256
-.equ SAFE_BUFFER_SIZE, 256
 .equ SIGIO, 29
 .equ KEY_SIZE, 288
 
@@ -144,8 +142,6 @@ generate_keys:
 	ldr x1, =e		// Load into x1 address of e
 	mov w0, 0x00010001
 	str w0, [x1]		// Write into memory the value of e
-
-	//brk #0
 
 	// Call C function wrapper (OpenSSL implementation)
 	ldr x0, =p_prime
@@ -282,7 +278,6 @@ event_loop:
 	mov x2, #0		// struct _kernel_timespec*
 	mov x3, #0		// sigmask
 	mov x4, #2
-	//ldr x3, =sigmask	// sigmask
 	mov x8, #73		// Syscall number for ppoll
 call_ppoll:
 	svc #0			// Syscall
@@ -298,7 +293,7 @@ check_socket:
 	
 	and w0, w0, #1		// fds[0].revent & POLLIN
 	cmp w0, #0
-//brk #0
+
 	beq check_input		// If no new messages, branch to check input
 
 	// Process socket message
@@ -318,7 +313,6 @@ read_msg:
 	
 	ldr x1, =ans_buffer	// Load answer buffer into x1
 	mov x2, #BUFFER_SIZE // Move buffer size into x2
-	//sub x2, x2, #1		// Subtract one from buffer size for null terminator
 	mov x8, #63		// Syscall number for read
 	svc #0			// Syscall
 
@@ -343,7 +337,6 @@ decrypt_message:
 	bl public_decrypt_wrapper // Call external decrypt function wrapper
 	
 print_message:
-//	brk #0
 	ldr x1, =ans_buffer	// Load answer buffer into x1
 	mov x0, #1		// stdout
 	mov x2, #BUFFER_SIZE
@@ -359,8 +352,6 @@ prev_check:
 	and w0, w0, #1		// fds[1].revents & POLLIN
 	cmp w0, #0
 	beq event_loop		// If there is no data available, branch back to event_loop
-
-//brk #1
 
 	ldr x0, =buffer		// Load into x0 buffer
 	mov x3, #BUFFER_SIZE	// Load into x3 the buffer size
@@ -426,30 +417,6 @@ loop_accept:
 	add x17, x17, 1
 	cmp x17, #2
 	beq accept
-
-get_msg:
-	// Get message input
-	mov x0, 0 		// File descriptor 0 is stdin
-	ldr x1, =buffer		// Address of buffer to store input
-	mov x2, 256		// Number of bytes to read
-	mov x8, 63		// Syscall number for read
-	svc #0 			// Syscall
-
-/*
-print:
-	// Print input
-	mov x0, 1		// File descriptor 1 is stdout
-	ldr x1, =buffer		// Storing buffer address at x1
-	mov x2, 256		// Number of bytes to write
-	mov x8, 64		// Syscall number for write
-	svc 0			// Syscall
-
-	mov x0, 1		// File descriptor 1 is stdout
-	ldr x1, =buffer		// Storing buffer address at x1
-	mov x2, 256		// Number of bytes to write
-	mov x8, 64		// Syscall number for write
-	svc 0			// Syscall
-*/
 
 exit:
     	// Exit program
